@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarButtonsExample"
+      aria-controls="navbarButtonsExample"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarButtonsExample">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to 'Home', root_path, class: 'nav-link'%>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center">
+        <%= link_to 'Login', new_user_session_path, class: 'btn btn-link px-3 me-2'%>
+        <%= link_to 'Sign up', new_user_registration_path, class: 'btn btn-primary me-3'%>
+      </div>
+    </div>
+  </div>
+</nav>
