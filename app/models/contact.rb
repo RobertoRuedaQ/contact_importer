@@ -2,8 +2,13 @@ class Contact < ApplicationRecord
 
   belongs_to :user
   
-  validates_associated :user
   validates :name, :date_of_birth, :telephone, :address, :credit_card, :franchise, :email, presence: true
+  validates :phone_number, format:{
+    with: /^\(\+\d{2}\)\d{3}\s\d{3}\s\d{2}\s\d{2}$/
+  }
+  validates :phone_number, format:{
+    with: /^\(\+\d{2}\)\d{3}\-\d{3}\-\d{2}\-\d{2}$/
+  }
   validates :name, format: { with: /[a-zA-Z0-9-]/, message:'not specials characters allowed for name'}
   validates :email,format: {with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, message: 'Email format not valid'}
   validates :email, uniqueness: { scope: :user_id, message: 'contact already registered for this user'} 
@@ -29,6 +34,6 @@ class Contact < ApplicationRecord
     when  /^(?:2131|1800|35)[0-9]{0,}$/
       self.franchise = 'JCB'
     end
-
   end
+
 end
