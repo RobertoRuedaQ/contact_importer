@@ -1,5 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe RecordLog, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'validations' do
+    subject { build(:record_log) }
+
+    it { should validate_presence_of(:comments) } 
+  end
 end
