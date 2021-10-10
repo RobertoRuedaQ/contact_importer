@@ -15,6 +15,14 @@ ActiveRecord::Schema.define(version: 2021_10_09_164521) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "contact_sources", force: :cascade do |t|
+    t.string "status"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_contact_sources_on_user_id"
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "date_of_birth", null: false
@@ -41,4 +49,5 @@ ActiveRecord::Schema.define(version: 2021_10_09_164521) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "contact_sources", "users"
 end
