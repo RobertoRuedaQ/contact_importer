@@ -19,10 +19,17 @@
         </li>
       </ul>
 
-      <div class="d-flex align-items-center">
-        <%= link_to 'Login', new_user_session_path, class: 'btn btn-link px-3 me-2'%>
-        <%= link_to 'Sign up', new_user_registration_path, class: 'btn btn-primary me-3'%>
-      </div>
+      <% if current_user.present? %>
+        <div class="d-flex align-items-center">
+          <%= link_to "Hola #{current_user.username}", root_path, class: 'btn btn-link px-3 me-2'%>
+          <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'btn btn-danger me-3'%>
+        </div>
+      <% else %>
+        <div class="d-flex align-items-center">
+          <%= link_to 'Login', new_user_session_path, class: 'btn btn-link px-3 me-2'%>
+          <%= link_to 'Sign in', new_user_registration_path, class: 'btn btn-primary me-3'%>
+        </div>
+      <% end %>
     </div>
   </div>
 </nav>
