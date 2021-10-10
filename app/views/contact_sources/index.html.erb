@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 col-xs-12">
+      <%= link_to 'Add contacts from a batch', new_contact_source_path, class:"btn btn-primary btn-lg" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Status</th>
+            <th scope="col">Created_at</th>
+            <th scope="col"># of contacts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @contact_sources.each do |contact_source| %>
+          <tr>
+            <td><%= link_to "#{contact_source.id}", contact_source_path(contact_source) %></td>
+            <td><%= contact_source.status  %></td>
+            <td><%= contact_source.created_at  %></td>
+            <td><%= contact_source.contact.size  %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
