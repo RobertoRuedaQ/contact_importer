@@ -1,4 +1,7 @@
 class ContactSourcesController < ApplicationController
+  include Sidekiq::Worker
+  sidekiq_options retry: false
+
   require 'csv'    
 
   before_action :authenticate_user!
@@ -48,10 +51,11 @@ class ContactSourcesController < ApplicationController
 
   def create_contacts_from_list
     @contact_source = ContactSource.find(params[:contact_source_id])
-    headers_position = params.to_unsafe_hash.invert
-    headers_position.select!{|k,v| ['name', 'date_of_birth', 'telephone', 'address', 'credit_card', 'email'].include?(k)}
-    CreateContactService.call_async(@contact_source, headers_position)
-    # CreateContactService.call(@contact_source, headers_position)
+    @contact_source.processing!
+    headers_positions = params.to_unsafe_hash.invert
+    headers_positions.select!{|k,v| ['name', 'date_of_birth', 'telephone', 'address', 'credit_card', 'email'].include?(k)}
+    ContactImportWorker.perform_async(@contact_source.id, headers_positions)
+    
     redirect_to @contact_source, notice: "The batch is currently being processed."
   end
 

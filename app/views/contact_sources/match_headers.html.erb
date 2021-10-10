@@ -5,7 +5,7 @@
   <p class="mb-0">Please match the name of the label with the field of the select, if they don't match, please leave it blank.</p>
 </div>
 <div class="container">
-  <%= form_with url: contact_source_create_contacts_from_list_path, method: :post do |form| %>
+  <%= form_with url: contact_source_create_contacts_from_list_path, method: :post, local: true do |form| %>
     <% @csv_headers.each_with_index do |header, index| %>
     <div class="row">
       <div class="col-md-2">

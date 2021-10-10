@@ -1,13 +1,13 @@
 class CreateContactService
   require 'csv'    
 
-  def self.call(contact_source, header_position)
-    new(contact_source, header_position).perform
+  def self.call(contact_source, header_positions)
+    new(contact_source, header_positions).perform
   end
 
-  def initialize(contact_source, header_position)
+  def initialize(contact_source, header_positions)
     @contact_source = contact_source
-    @header_position = header_position
+    @header_position = header_positions
   end
 
 
@@ -15,9 +15,7 @@ class CreateContactService
     begin
       file = @contact_source.contact_list.download
       csv = CSV.new(file, :headers => true).read
-      binding.pry
       csv.each do |row|
-        binding.pry
         contact = Contact.new(
           name: row[@header_position['name'].to_i],
           date_of_birth: row[@header_position['date_of_birth'].to_i],
