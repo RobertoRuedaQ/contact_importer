@@ -1,1 +1,25 @@
-<%= @csv_table %>
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading">Before continue!</h4>
+  <p>The information from your file may not match the information. We need your help.</p>
+  <hr>
+  <p class="mb-0">Please match the name of the label with the field of the select, if they don't match, please leave it blank.</p>
+</div>
+<div class="container">
+  <%= form_with url: contact_source_create_contacts_from_list_path, method: :post, local: true do |form| %>
+    <% @csv_headers.each_with_index do |header, index| %>
+    <div class="row">
+      <div class="col-md-2">
+        <%= form.label header %>
+      </div>
+      <div class="col-md-2">
+        <%= form.select :"#{index}", [['Name','name'], ['Date of birth', 'date_of_birth'], ['Telephone', 'telephone'],['Address','address'] , ['Credit Card', 'credit_card'],['Email', 'email'] ], include_blank: true %>
+      </div>
+    </div>
+      <% end %>
+      <div class="row">
+        <div class="col-md-2">
+          <%= form.submit "Match!" %>
+        </div>
+      </div>
+  <% end %>
+</div>

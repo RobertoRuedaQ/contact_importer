@@ -10,7 +10,7 @@
             <th scope="col">Date of Birth</th>
             <th scope="col">Phone</th>
             <th scope="col">Address</th>
-            <th scope="col">Credit Card</th>
+            <th scope="col">Credit Card (last 4)</th>
             <th scope="col">Franchise</th>
             <th scope="col">Email</th>
           </tr>
@@ -23,7 +23,7 @@
             <td><%= contact.date_of_birth  %></td>
             <td><%= contact.telephone  %></td>
             <td><%= contact.address  %></td>
-            <td><%= contact.credit_card  %></td>
+            <td><%= contact.last_four  %></td>
             <td><%= contact.franchise  %></td>
             <td><%= contact.email  %></td>
           </tr>
@@ -32,4 +32,6 @@
       </table>
     </div>
   </div>
+  <%= will_paginate @contacts %>
 </div>
+
