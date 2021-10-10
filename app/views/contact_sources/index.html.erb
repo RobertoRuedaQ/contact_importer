@@ -22,7 +22,7 @@
             <td><%= link_to "#{contact_source.id}", contact_source_path(contact_source) %></td>
             <td><%= contact_source.status  %></td>
             <td><%= contact_source.created_at  %></td>
-            <td><%= contact_source.contact.size  %></td>
+            <td><%= contact_source.contacts.size  %></td>
           </tr>
           <% end %>
         </tbody>

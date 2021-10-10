@@ -4,10 +4,10 @@ class Contact < ApplicationRecord
   
   validates :name, :date_of_birth, :telephone, :address, :credit_card, :franchise, :email, presence: true
   validates :phone_number, format:{
-    with: /^\(\+\d{2}\)\d{3}\s\d{3}\s\d{2}\s\d{2}$/
+    with: /\A\(\+\d{2}\)\d{3}\s\d{3}\s\d{2}\s\d{2}\z/
   }
   validates :phone_number, format:{
-    with: /^\(\+\d{2}\)\d{3}\-\d{3}\-\d{2}\-\d{2}$/
+    with: /\A\(\+\d{2}\)\d{3}\-\d{3}\-\d{2}\-\d{2}\z/
   }
   validates :name, format: { with: /[a-zA-Z0-9-]/, message:'not specials characters allowed for name'}
   validates :email,format: {with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, message: 'Email format not valid'}
