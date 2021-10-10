@@ -1,6 +1,6 @@
 <%= form_with model: @contact_source do |f|  %>
   <%= f.label :contact_list %>
   <%= f.file_field :contact_list %>
-  <%  f.hidden_field :user_id, value: current_user.id %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
   <%= f.submit 'Upload!', class: 'btn btn-info' %>
 <% end %>
