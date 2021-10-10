@@ -7,9 +7,9 @@ class Contact < ApplicationRecord
   validates :telephone, format:{
     with: /\A\(\+\d{2}\)\s\d{3}\s\d{3}\s\d{2}\s\d{2}/
   }
-  validates :telephone, format:{
-    with: /\A\(\+\d{2}\)\s\d{3}\-\d{3}\-\d{2}\-\d{2}/
-  }
+  # validates :telephone, format:{
+  #   with: /\A\(\+\d{2}\)\s\d{3}\-\d{3}\-\d{2}\-\d{2}/
+  # }
   validates :name, format: { with: /\A[a-zA-Z\-\s]+\z/, message:'not specials characters allowed for name'}
   validates :email,format: {with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, message: 'Email format not valid'}
   validates :email, uniqueness: { scope: :user_id, message: 'contact already registered for this user'} 
