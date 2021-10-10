@@ -1,5 +1,6 @@
 <div class="container">
   <h3><%= "Batch ##{@contact_source.id}" %></h3>
+  <h5><%= "Current status: #{@contact_source.status}" %></h5>
 
   <div class="container">
     <div class="row">
@@ -25,6 +26,8 @@
               <td><%= contact.date_of_birth  %></td>
               <td><%= contact.telephone  %></td>
               <td><%= contact.address  %></td>
+              <td><%= contact.last_four  %></td>
+              <td><%= contact.franchise  %></td>
               <td><%= contact.email  %></td>
             </tr>
             <% end %>

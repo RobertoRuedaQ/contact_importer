@@ -1,21 +1,23 @@
 class Contact < ApplicationRecord
+  include BCrypt
 
   belongs_to :user
   
   validates :name, :telephone, :address, :date_of_birth, :credit_card, :email, presence: true
   validates :telephone, format:{
-    with: /\A\(\+\d{2}\)\s\d{3}\s\d{3}\s\d{2}\s\d{2}\z/
+    with: /\A\(\+\d{2}\)\s\d{3}\s\d{3}\s\d{2}\s\d{2}/
   }
   validates :telephone, format:{
-    with: /\A\(\+\d{2}\)\s\d{3}\s\d{3}\s\d{2}\s\d{2}\z/
+    with: /\A\(\+\d{2}\)\s\d{3}\-\d{3}\-\d{2}\-\d{2}/
   }
-  validates :name, format: { with: /\A[a-zA-Z\-]+\z/, message:'not specials characters allowed for name'}
+  validates :name, format: { with: /\A[a-zA-Z\-\s]+\z/, message:'not specials characters allowed for name'}
   validates :email,format: {with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, message: 'Email format not valid'}
   validates :email, uniqueness: { scope: :user_id, message: 'contact already registered for this user'} 
   validates_date :date_of_birth, format: 'yyyy-mm-dd'
 
   before_create :set_franchise
   before_create :save_last_four
+  before_create :encrypt_credit_card_number
 
 
   def set_franchise
@@ -41,6 +43,10 @@ class Contact < ApplicationRecord
 
   def save_last_four
     self.last_four = self.credit_card.last(4)
+  end
+
+  def encrypt_credit_card_number
+    self.credit_card = BCrypt::Password.create(credit_card)
   end
 
 end

@@ -51,7 +51,7 @@ class ContactSourcesController < ApplicationController
 
   def create_contacts_from_list
     @contact_source = ContactSource.find(params[:contact_source_id])
-    @contact_source.processing!
+    @contact_source.process!
     headers_positions = params.to_unsafe_hash.invert
     headers_positions.select!{|k,v| ['name', 'date_of_birth', 'telephone', 'address', 'credit_card', 'email'].include?(k)}
     ContactImportWorker.perform_async(@contact_source.id, headers_positions)
@@ -65,16 +65,5 @@ class ContactSourcesController < ApplicationController
     params.require(:contact_source).permit(:user_id, :contact_list)
   end
 
-
-  def public_contact_list_url(contact_source)
-    if contact_source.contact_list&.attachment
-      if Rails.env.development?
-          url = Rails.application.routes.url_helpers.rails_blob_url(contact_source.contact_list, only_path: true)
-      else
-          url = contact_source.contact_list&.service_url&.split("?")&.first
-      end
-      return url
-    end
-  end
 
 end

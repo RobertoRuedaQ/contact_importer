@@ -28,12 +28,15 @@ class CreateContactService
         )
         if contact.save 
           puts 'record saved'
+          @contact_source.accept!
         else
           RecordLog.create(contact_source_id: @contact_source.id, comments: "For the row that start with #{row[0]} was not possible to save the record because: #{contact.errors.messages.to_s}")
         end
       end  
     rescue => exception
       RecordLog.create(contact_source_id: @contact_source.id, comments: exception.errors.messages.to_s)
+      @contact_source.reject!
+      puts exception
     end
   end
 end

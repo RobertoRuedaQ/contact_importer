@@ -283,6 +283,7 @@ PLATFORMS
 DEPENDENCIES
   aasm
   aws-sdk-s3
+  bcrypt (~> 3.1.7)
   bootsnap (>= 1.1.0)
   bootstrap (~> 5.1.0)
   byebug
