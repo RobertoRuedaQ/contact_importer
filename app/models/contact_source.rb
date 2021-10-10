@@ -2,6 +2,7 @@ class ContactSource < ApplicationRecord
   include AASM
 
   belongs_to :user
+  has_many :contacts
   has_one_attached :contact_list
 
   validates :contact_list_validation, presence: true
