@@ -6,6 +6,8 @@ class ContactSource < ApplicationRecord
   has_many :record_logs
   has_one_attached :contact_list
 
+  after_save :check_status
+
   aasm column: 'status' do 
     state :on_hold, initial: true
     state :processing
@@ -22,6 +24,17 @@ class ContactSource < ApplicationRecord
   
     event :accept do
       transitions from: :processing, to: :finished
+    end
+  end
+
+
+  def check_status
+    if processing?
+      if self.contacts.any?
+        accept!
+      else
+        reject!
+      end
     end
   end
 
