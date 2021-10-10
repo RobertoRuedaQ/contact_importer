@@ -3,10 +3,10 @@ class Contact < ApplicationRecord
   belongs_to :user
   
   validates :name, :date_of_birth, :telephone, :address, :credit_card, :franchise, :email, presence: true
-  validates :phone_number, format:{
+  validates :telephone, format:{
     with: /\A\(\+\d{2}\)\d{3}\s\d{3}\s\d{2}\s\d{2}\z/
   }
-  validates :phone_number, format:{
+  validates :telephone, format:{
     with: /\A\(\+\d{2}\)\d{3}\-\d{3}\-\d{2}\-\d{2}\z/
   }
   validates :name, format: { with: /[a-zA-Z0-9-]/, message:'not specials characters allowed for name'}
@@ -15,6 +15,7 @@ class Contact < ApplicationRecord
 
 
   before_save :set_franchise
+  before_save :save_last_four
 
 
   def set_franchise
@@ -34,6 +35,10 @@ class Contact < ApplicationRecord
     when  /^(?:2131|1800|35)[0-9]{0,}$/
       self.franchise = 'JCB'
     end
+  end
+
+  def save_last_four
+    self.last_four = self.credit_card.last(4)
   end
 
 end
