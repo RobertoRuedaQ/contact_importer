@@ -1,20 +1,23 @@
 class Contact < ApplicationRecord
+  include BCrypt
 
   belongs_to :user
   
-  validates :name, :date_of_birth, :telephone, :address, :credit_card, :franchise, :email, presence: true
-  validates :phone_number, format:{
-    with: /\A\(\+\d{2}\)\d{3}\s\d{3}\s\d{2}\s\d{2}\z/
+  validates :name, :telephone, :address, :date_of_birth, :credit_card, :email, presence: true
+  validates :telephone, format:{
+    with: /\A\(\+\d{2}\)\s\d{3}\s\d{3}\s\d{2}\s\d{2}/
   }
-  validates :phone_number, format:{
-    with: /\A\(\+\d{2}\)\d{3}\-\d{3}\-\d{2}\-\d{2}\z/
-  }
-  validates :name, format: { with: /[a-zA-Z0-9-]/, message:'not specials characters allowed for name'}
+  # validates :telephone, format:{
+  #   with: /\A\(\+\d{2}\)\s\d{3}\-\d{3}\-\d{2}\-\d{2}/
+  # }
+  validates :name, format: { with: /\A[a-zA-Z\-\s]+\z/, message:'not specials characters allowed for name'}
   validates :email,format: {with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, message: 'Email format not valid'}
   validates :email, uniqueness: { scope: :user_id, message: 'contact already registered for this user'} 
+  validates_date :date_of_birth, format: 'yyyy-mm-dd'
 
-
-  before_save :set_franchise
+  before_create :set_franchise
+  before_create :save_last_four
+  before_create :encrypt_credit_card_number
 
 
   def set_franchise
@@ -28,12 +31,22 @@ class Contact < ApplicationRecord
     when  /^3[47][0-9]{0,}$/
       self.franchise = 'American Express'
     when  /^3(?:0[0-59]{1}|[689])[0-9]{0,}$/
-      self.franchise = 'Dinners Club'
+      self.franchise = 'Diners Club'
     when  /^(6011|65|64[4-9]|62212[6-9]|6221[3-9]|622[2-8]|6229[01]|62292[0-5])[0-9]{0,}$/
       self.franchise = 'Discover'
     when  /^(?:2131|1800|35)[0-9]{0,}$/
       self.franchise = 'JCB'
+    else
+      self.franchise = nil
     end
+  end
+
+  def save_last_four
+    self.last_four = self.credit_card.last(4)
+  end
+
+  def encrypt_credit_card_number
+    self.credit_card = BCrypt::Password.create(credit_card)
   end
 
 end

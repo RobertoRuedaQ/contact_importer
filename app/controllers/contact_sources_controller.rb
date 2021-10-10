@@ -1,4 +1,7 @@
 class ContactSourcesController < ApplicationController
+  include Sidekiq::Worker
+  sidekiq_options retry: false
+
   require 'csv'    
 
   before_action :authenticate_user!
@@ -38,11 +41,22 @@ class ContactSourcesController < ApplicationController
   def match_headers
     @contact_source = ContactSource.find(params[:contact_source_id])
     if @contact_source.contact_list.attached?
-      csv_url = public_contact_list_url(@contact_source)
-      @csv_table = CSV.open(csv_url, :headers => true).read
+      file = @contact_source.contact_list.download 
+      csv_table = CSV.new(file, :headers => true).read
+      @csv_headers = csv_table.headers
     else
       redirect_to @contact_source, notice: "File not found, can't complete the process."
     end
+  end
+
+  def create_contacts_from_list
+    @contact_source = ContactSource.find(params[:contact_source_id])
+    @contact_source.process!
+    headers_positions = params.to_unsafe_hash.invert
+    headers_positions.select!{|k,v| ['name', 'date_of_birth', 'telephone', 'address', 'credit_card', 'email'].include?(k)}
+    ContactImportWorker.perform_async(@contact_source.id, headers_positions)
+    
+    redirect_to @contact_source, notice: "The batch is currently being processed."
   end
 
   private
@@ -51,16 +65,5 @@ class ContactSourcesController < ApplicationController
     params.require(:contact_source).permit(:user_id, :contact_list)
   end
 
-
-  def public_contact_list_url(contact_source)
-    if contact_source.contact_list&.attachment
-      if Rails.env.development?
-          url = Rails.application.routes.url_helpers.rails_blob_url(contact_source.contact_list, only_path: true)
-      else
-          url = contact_source.contact_list&.service_url&.split("?")&.first
-      end
-      return url
-    end
-  end
 
 end

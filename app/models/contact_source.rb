@@ -3,9 +3,10 @@ class ContactSource < ApplicationRecord
 
   belongs_to :user
   has_many :contacts
+  has_many :record_logs
   has_one_attached :contact_list
 
-  validates :contact_list_validation, presence: true
+  after_save :check_status
 
   aasm column: 'status' do 
     state :on_hold, initial: true
@@ -27,13 +28,17 @@ class ContactSource < ApplicationRecord
   end
 
 
-  def contact_list_validation
-    if contact_list.attached?
-      if !contact_list.blob.content_type == 'text/csv'
-        contact_list.purge
-        errors[:base] << 'Wrong format'
+  def check_status
+    if processing?
+      if self.contacts.any?
+        accept!
+      else
+        reject!
       end
     end
   end
+
+
+ 
 
 end
