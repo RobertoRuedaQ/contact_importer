@@ -1,24 +1,38 @@
-# README
+## Target
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The application will allow users to upload contact files in CSV format and process them in order
+to generate a unified contact file. The contacts must be associated with the user who imported
+them into the platform. When uploading the files, the application must validate that the fields
+entered are correctly formatted. You must take into account that the files can have many
+records.
 
-Things you may want to cover:
+## Initial setup & gems
 
-* Ruby version
+- **DB:** Postgresql
+- **Unit Testing:** Rspec
+- **Login System:** Devise
+- **Background job**: Sidekiq
+- **Encrypting**: bcrypt
+- **Pagination**: will_paginate
 
-* System dependencies
+To run the app in the local machine, clone the project:
 
-* Configuration
+```ruby
+git clone https://github.com/RobertoRuedaQ/contact_importer.git
+```
 
-* Database creation
+In the terminal, go to the directory setup as any other rails project.
 
-* Database initialization
+```ruby
+bundle install
+rails db:setup
+```
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+Or if you prefer it is published in Heroku. Find it in the next link:
 
-* Deployment instructions
+[ContactLoader](https://importer-contact-robert.herokuapp.com/)
 
-* ...
+For testing you may use this file already filled with data.
+
+[File for testing](https://publiccontactimporter.s3.amazonaws.com/contact_example.csv)

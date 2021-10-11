@@ -27,10 +27,11 @@ class CreateContactService
         )
         if contact.save 
           puts 'record saved'
+          @contact_source.check_status
         else
           RecordLog.create(contact_source_id: @contact_source.id, comments: "For the row that start with #{row[0]} was not possible to save the record because: #{contact.errors.messages.to_s}")
         end
       end
-      @contact_source.update
+      @contact_source.check_status
   end
 end
