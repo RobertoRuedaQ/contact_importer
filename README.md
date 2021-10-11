@@ -27,3 +27,12 @@ In the terminal, go to the directory setup as any other rails project.
 bundle install
 rails db:setup
 ```
+
+
+Or if you prefer it is published in Heroku. Find it in the next link:
+
+[ContactLoader](https://importer-contact-robert.herokuapp.com/)
+
+For testing you may use this file already filled with data.
+
+[File for testing](https://publiccontactimporter.s3.amazonaws.com/contact_example.csv)
